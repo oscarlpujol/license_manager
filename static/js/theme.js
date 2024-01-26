@@ -39,11 +39,17 @@ const checkSite = () => {
         if (url === '/') {
             document.getElementById('linkIndex').style.textDecoration = "underline";
         }
-        else if (url.includes('users')) {
+        else if (url.includes('licencias')) {
+            document.getElementById('linkActiveLicenses').style.textDecoration = "underline";
+        }
+        else if (url.includes('solicitudes')) {
+            document.getElementById('linkRequests').style.textDecoration = "underline";
+        }
+        else if (url.includes('usuarios')) {
             document.getElementById('linkUsers').style.textDecoration = "underline";
         }
-        else if (url.includes('machines')) {
-            document.getElementById('linkMachines').style.textDecoration = "underline";
+        else if (url.includes('admin')) {
+            document.getElementById('linkManagement').style.textDecoration = "underline";
         }
     }
     catch {}

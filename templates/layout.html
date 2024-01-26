@@ -26,9 +26,11 @@
       <h2 class="text-center" id="theTitle">{{ TITLE }}</h2><br>
       {% if isAdmin %}
         {% block admin_menu %}
-          <a id="linkIndex" href="{{ url_for('views.index')}}">Inicio</a>
-          <a id="linkMachines" href="{{ url_for('views.machines')}}">Máquinas</a>
-          <a id="linkUsers" href="{{ url_for('views.users')}}">Usuarios</a>
+          <a id="linkIndex" href="{{ url_for('views.index') }}">Formulario de solicitud</a>
+          <a id="linkActiveLicenses" href="{{ url_for('views.active_licenses') }}">Licencias</a>
+          <a id="linkRequests" href="{{ url_for('views.requests') }}">Solicitudes pendientes</a>
+          <a id="linkUsers" href="{{ url_for('views.users') }}">Usuarios</a>
+          <a id="linkManagement" href="{{ url_for('views.management') }}">Administración</a>
         {% endblock %}
       {% endif %}
       {% block container %}

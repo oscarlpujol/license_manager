@@ -8,16 +8,24 @@
     <thead>
       <tr>
         <th>Email</th>
+        <th class="text-center">&nbsp;&nbsp;&nbsp;Rol</th>
         <th class="text-center">&nbsp;&nbsp;&nbsp;isAdmin</th>
         <th class="text-center">&nbsp;&nbsp;&nbsp;Recuperar Contraseña</th>
-        <th class="text-center">&nbsp;&nbsp;&nbsp;Administrar</th>
       </tr>
     </thead>
     <tbody>
-      {% for user in users: %}
+      {% for user in users %}
       <tr id="{{ user['id'] }}">
         <td>
           <p class="email">{{ user['email'] }}</p>
+        </td>
+        <td class="text-center">
+          <select onchange="changeRole()">
+            <option value="None">Sin asignar</option>
+            {% for role in roles %}
+            <option {% if user['role'] is not none and role.lower() == user['role'].lower()  %} selected {% endif %} value="{{ role }}">{{ role.capitalize() }}</option>
+            {% endfor %}
+          </select>
         </td>
         <td class="text-center">
           <div class="form-check form-switch d-flex justify-content-center">
@@ -26,14 +34,6 @@
         </td>
         <td class="text-center">
           <a href="#/" class="pass" onclick="restorePass($(this))"><svg class="icono" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M224 64c-44.2 0-80 35.8-80 80v48H384c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V256c0-35.3 28.7-64 64-64H80V144C80 64.5 144.5 0 224 0c57.5 0 107 33.7 130.1 82.3c7.6 16 .8 35.1-15.2 42.6s-35.1 .8-42.6-15.2C283.4 82.6 255.9 64 224 64zm32 320c17.7 0 32-14.3 32-32s-14.3-32-32-32H192c-17.7 0-32 14.3-32 32s14.3 32 32 32h64z"/></svg></a>
-        </td>
-        <td class="text-center">
-          <a href="/users/{{ user['id'] }}/machines"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-monitor"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg></a>
-          <a href="#/" onclick="delUser($(this){% if user['id'] == currentUserId %}, true{% endif %})"><svg class="trashIcon"
-            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-            <path
-              d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z" />
-          </svg></a>
         </td>
       </tr>
       {% endfor %}

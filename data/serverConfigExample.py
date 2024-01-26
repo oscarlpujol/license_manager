@@ -1,4 +1,4 @@
-TITLE = "Wake on LAN"   # Título que aparecerá en la aplicación web.
+TITLE = "Gestor de licencias"   # Título que aparecerá en la aplicación web.
 SERVER_NAME = "<SERVER_NAME>" # Nombre descriptivo del servidor que aparecerá en los correos electrónicos.
 ADMIN_MAIL = "<ADMIN_MAIL>"    # Email del administrador del servidor. Se establecerá como correo electrónico de contacto.
 SECRET = "<SECRET>"   # Cadena de texto empleada para generar las cookies de sesión
