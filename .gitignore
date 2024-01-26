@@ -13,3 +13,5 @@ preconfig.py
 secrets
 serverConfig.py
 install.sh
+.venv
+index_machines.html

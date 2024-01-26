@@ -1,0 +1,63 @@
+{% extends "layout.html" %}
+{% block faviconType %}favicon.ico{% endblock %}
+
+{% block container %}
+<h3>Solicitudes pendientes</h3>
+<div class="borderTable align-middle">
+
+    <table id="equipos" class="table table-striped table-hover" style="width:100%">
+      <thead>
+        <tr>
+          <th>Título</th>
+          <th>ISBN</th>
+          <th>Número de licencias</th>
+          <th>Nombre del solicitante</th>
+          <th>Centro</th>
+          <th>Última petición</th>
+          <th>Gestión</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th>Aceptar/Denegar</th>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr id="add">
+          <td>
+          </td>
+          <td>
+            <a href="#/" onclick="addMachine()"><svg class="plusIcon" xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 448 512">
+                <path
+                  d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
+              </svg></a>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+</div>
+{% endblock %}
+
+{% block user_info %}
+  {{ super() }}
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script src="{{ url_for('static', filename='js/machineFunctions.js')}}"></script>
+{% endblock %}
