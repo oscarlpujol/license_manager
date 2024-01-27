@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, DateTime, E
 from sqlalchemy.orm import relationship, backref
 from werkzeug.security import generate_password_hash
 from flask_login import UserMixin
-
+from data.constans import roles, default_role
 from database import Base
 
 class User(UserMixin, Base):
@@ -11,7 +11,7 @@ class User(UserMixin, Base):
     id = Column(Integer, primary_key=True) # primary keys are required by SQLAlchemy
     email = Column(String(100), unique=True)
     password = Column((String(100)))
-    role = Column(Enum("interno", "externo", "promotor", name="roles"), default="externo")
+    role = Column(Enum(*roles, name="roles"), default=default_role)
     admin = Column(Boolean, default=False)
     activated = Column(Boolean, default=False)
 

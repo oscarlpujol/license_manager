@@ -1,5 +1,5 @@
 from database import db_session
-from models import User, Machine, Ownership
+from models import User, License #, Machine, Ownership,
 
 import json
 import os
@@ -12,12 +12,24 @@ parser.add_argument('--users')
 parser.add_argument('--owners')
 parser.add_argument('--usermail')
 parser.add_argument('--userpass')
+parser.add_argument('--licenses')
 parser.add_argument('--admin', action='store_true')
 
 args = parser.parse_args()
 cli_args = vars(args)
 
 print(cli_args)
+
+if cli_args['licenses']:
+    lice_path = cli_args['licenses']
+    if os.path.isfile(lice_path):
+        with open(lice_path, 'r') as file:
+            licenses = json.load(file)
+            for license in licenses:
+                new_license = License(email=license["email"], password=license["password"])
+                db_session.add(new_license)
+                db_session.commit()
+
 
 if cli_args['machines']:
     mach_path = cli_args['machines']

@@ -4,6 +4,7 @@ from sqlalchemy import func
 
 from models import User, License, Request #, Machine, Ownership,
 import data.serverConfig as config
+from data.constans import roles
 
 views = Blueprint('views', __name__)
 
@@ -79,12 +80,9 @@ def management():
 @login_required
 def users():
     if current_user.admin:
-        
         # Recupera los datos de todos los usuarios.
         if request.method == "GET":
-
             users = User.query.all()
-            roles = ['interno', 'externo', 'promotor']
             return render_template('users.html', users=users, roles=roles, TITLE=config.TITLE, isAdmin=current_user.admin, currentUserId=current_user.id)
 
     else:
