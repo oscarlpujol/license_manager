@@ -16,3 +16,4 @@ install.sh
 .venv
 index_machines.html
 resources
+jobs.sqlite

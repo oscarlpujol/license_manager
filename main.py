@@ -1,6 +1,13 @@
 from flask import Flask, request, redirect, url_for, render_template
 from flask_login import login_required, LoginManager, current_user
 
+from datetime import datetime
+from pytz import timezone
+
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
+from apscheduler.executors.pool import ProcessPoolExecutor
+
 import os
 from subprocess import run, PIPE
 
@@ -10,6 +17,23 @@ from auth import auth
 from views import views
 from routes import routes
 import data.serverConfig as config
+
+
+jobstores = {
+    'default': SQLAlchemyJobStore(url='sqlite:///data/jobs.sqlite')
+}
+executors = {
+    'default': {'type': 'threadpool', 'max_workers': 20},
+    'processpool': ProcessPoolExecutor(max_workers=5)
+}
+job_defaults = {
+    'coalesce': False,
+    'max_instances': 3
+}
+scheduler = BackgroundScheduler()
+scheduler.configure(jobstores=jobstores, executors=executors, job_defaults=job_defaults, timezone=timezone('Europe/Madrid'))
+
+print("Se ha configurado el scheduler")
 
 login_manager = LoginManager()
 
@@ -25,7 +49,6 @@ def insertUser(mail, password, role=None, isAdmin=False, activated=False):
     db_session.add(newUser)
     db_session.commit()
     return
-
 
 
 users = User.query.all()
@@ -60,7 +83,7 @@ if users == []:
 #         print("Antes de ejecutar la aplicación por primera vez, es necesario emplear el modo ENV=firstrun y especificar las credenciales del administrador inicial mediante las variables de entorno ADMIN_MAIL y ADMIN_PASS.")
 #         exit(0)
 
-
+scheduler.start()
 
 app.secret_key = config.SECRET
 app.register_blueprint(auth) 
