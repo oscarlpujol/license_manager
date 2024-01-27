@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, DateTime, E
 from sqlalchemy.orm import relationship, backref
 from werkzeug.security import generate_password_hash
 from flask_login import UserMixin
-from data.constans import roles, default_role
+from data.constans import roles, default_role, req_states, default_req_state
 from database import Base
 
 class User(UserMixin, Base):
@@ -22,7 +22,7 @@ class User(UserMixin, Base):
         self.password = generate_password_hash(password)
     
     def __repr__(self):
-        user_json = {"id": self.id, "email": self.email, "password": self.password, "admin": self.admin, "activated": self.activated}
+        user_json = {"id": self.id, "email": self.email, "password": self.password, "role": self.role, "admin": self.admin, "activated": self.activated}
         return str(user_json)
 
     def setAdmin(self,admin):
@@ -95,7 +95,13 @@ class Request(Base):
     book_id = Column(String(100), ForeignKey("books.isbn"), nullable=False)
     num_req_licenses = Column(Integer, nullable=False) 
     timestamp = Column(DateTime, default=func.now())
-    status = Column(Enum("Aceptada", "Rechazada", "En espera"), default=False)
+    status = Column(Enum(*req_states), default=default_req_state)
+
+    def __init__(self, user_id, book_id, num_req_licenses, status=default_req_state):
+        self.user_id = user_id
+        self.book_id = book_id
+        self.num_req_licenses = num_req_licenses
+        self.status = status
 
 # class Machine(Base):
 #     __tablename__ = 'machines'

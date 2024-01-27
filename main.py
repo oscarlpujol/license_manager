@@ -60,7 +60,7 @@ if users == []:
         licenses = json.load(file)
         for license in licenses:
             new_license = License(
-                id = license["license_id"],
+                code = license["license_id"],
                 isbn = license["ISBN"],
                 title = license["title"],
                 expiration_date = license["expiration_date"]

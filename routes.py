@@ -6,7 +6,9 @@ import string
 import re
 import os
 
-from models import User #, Machine, Ownership
+from data.constans import default_req_state, finished_req
+
+from models import User, Request #, Machine, Ownership
 from database import db_session
 import mail.mail as mail
 import data.serverConfig as config
@@ -50,6 +52,42 @@ def password():
 
     except:
         return render_template('changePassword.html', error="Ha ocurrido un error.")
+
+@routes.route('/solicitar', methods=['POST'])
+@login_required
+def requests():
+    action = request.form['action']
+    email = request.form.get('email', current_user.email)
+    grouped_data = {}
+
+    for key, value in request.form.items():
+        if key in ['action', 'email', 'title']:
+            continue
+
+        field_number = key.split('_')[1]
+
+        if field_number not in grouped_data:
+            grouped_data[field_number] = {}
+
+        if key.startswith('isbn'):
+            grouped_data[field_number]['isbn'] = value
+        elif key.startswith('numlic'):
+            grouped_data[field_number]['numlic'] = value
+
+    for req in grouped_data:
+        new_req = Request(current_user.id, grouped_data[req]['isbn'], grouped_data[req]['numlic'], default_req_state)
+        if current_user.role == "interno" or "promotor" and action == "enviar":
+            send_licenses(email, grouped_data[req]['isbn'], grouped_data[req]['numlic'])
+        elif current_user.role != "externo" or action != "solicitar":
+            abort(403)
+        # db_session.add(new_req)
+        # db_session.commit()
+        
+def send_licenses(email, isbn, number):
+    import pdb
+    pdb.set_trace()
+    request.query()
+    request.finished()
 
 
 # @routes.route('/machines', methods=['POST', 'PUT'])

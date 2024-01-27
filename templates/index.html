@@ -18,7 +18,7 @@
         <!-- TODO: Aquí hay que añadir los filtros entre el título y el ISBN -->
         <th><input type="text" name="title_1" required></th>
         <th><input type="text" name="isbn_1" required></th>
-        <th><input type="number" name="num_lic_1" required></th>
+        <th><input type="number" name="numlic_1" required></th>
       </tbody>
       <tfoot>
         <tr id="add">
@@ -37,9 +37,10 @@
           <td></td>
           <td>
             {% if role == "interno" or role == "promotor" %}
-            <th><button type="submit" name="action" value="Solicitar">Solicitar</th>
+            <!-- TODO: Añadir aquí lo del modal, que escoja el mensaje a enviar y el usuario y entonces lo envíe -->
+            <th><button type="submit" name="action" value="enviar">Enviar</th>
             {% else %}
-            <th><button type="submit" name="action" value="Enviar">Enviar</th>
+            <th><button type="submit" name="action" value="solicitar">Solicitar</th>
             {% endif %}
           </td>
           <td></td>
