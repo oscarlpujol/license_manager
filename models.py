@@ -62,7 +62,7 @@ class Book(Base):
 class License(Base):
     __tablename__ = "licenses"
     code = Column(String(100), primary_key=True) # primary keys are required by SQLAlchemy
-    book = Column(String(100), ForeignKey("book.isbn"), nullable=False)
+    book = Column(String(100), ForeignKey("books.isbn"), nullable=False)
     user_type = Column(String(100))
     functionality = Column(String(100))
     requested_by = Column(String(100), ForeignKey("requests.id"), nullable=True)
@@ -92,7 +92,7 @@ class Request(Base):
 
     id = Column(String(100), primary_key=True, unique=True)
     user_id = Column(String(100), ForeignKey("users.id"), nullable=False)
-    book_id = Column(String(100), ForeignKey("book.isbn"), nullable=False)
+    book_id = Column(String(100), ForeignKey("books.isbn"), nullable=False)
     num_req_licenses = Column(Integer, nullable=False) 
     timestamp = Column(DateTime, default=func.now())
     status = Column(Enum("Aceptada", "Rechazada", "En espera"), default=False)
