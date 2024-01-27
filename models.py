@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, UniqueConstraint, Enum
+from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, DateTime, Enum, func
 from sqlalchemy.orm import relationship, backref
 from werkzeug.security import generate_password_hash
 from flask_login import UserMixin
@@ -6,7 +6,7 @@ from flask_login import UserMixin
 from database import Base
 
 class User(UserMixin, Base):
-    __tablename__ = 'users'
+    __tablename__ = "users"
 
     id = Column(Integer, primary_key=True) # primary keys are required by SQLAlchemy
     email = Column(String(100), unique=True)
@@ -31,27 +31,55 @@ class User(UserMixin, Base):
     def setPassword(self,password):
         self.password = generate_password_hash(password)
 
+class LoginCode(Base):
+    __tablename__ = "logincodes"
+    code = Column(String(100), primary_key=True)
+    user_id = Column(String(100), ForeignKey("users.id"), nullable=False)
+    creation_date = Column(DateTime, default=func.now())
+    expiration_date = Column(DateTime)
+
+    def __init__(self, code, user_id):
+        self.code = code
+        self.user_id = user_id
+
+
+class Book(Base):
+    __tablename__="books"
+    isbn = Column(String(100), primary_key=True)
+    title = Column(String(100))
+
+    def __init__(self, isbn, title):
+        self.isbn = isbn
+        self.title = title
+
+    def __repr__(self):
+        book_json = {
+            "ISBN" : self.isbn,
+            "title" : self.title
+        }
+        return str(book_json)
 
 class License(Base):
     __tablename__ = "licenses"
-    id = Column(String(100), primary_key=True) # primary keys are required by SQLAlchemy
-    isbn = Column(String(100))
-    title = Column(String(100))
+    code = Column(String(100), primary_key=True) # primary keys are required by SQLAlchemy
+    book = Column(String(100), ForeignKey("book.isbn"), nullable=False)
+    user_type = Column(String(100))
+    functionality = Column(String(100))
     requested_by = Column(String(100), ForeignKey("requests.id"), nullable=True)
-    expiration_date = Column(String(100))
-    # timestamp_request
+    expiration_date = Column(DateTime)
+    # timestamp_request ?
 
-    def __init__(self, id, isbn, title, expiration_date):
-        self.id = id
-        self.isbn = isbn
-        self.title = title
+    def __init__(self, code, book, user_type, functionality, expiration_date):
+        self.code = code
+        self.book = book
+        self.user_type = user_type
+        self.functionality = functionality
         self.expiration_date = expiration_date
 
     def __repr__(self):
         license_json = {
-            "id" : self.id,
-            "ISBN" : self.isbn,
-            "title" : self.title,
+            "code" : self.code,
+            "ISBN" : self.book
         }
         return str(license_json)
     
@@ -63,9 +91,11 @@ class Request(Base):
     __tablename__ = "requests"
 
     id = Column(String(100), primary_key=True, unique=True)
-    user_id = Column("user_id", String(100), ForeignKey("users.id"), nullable=True)
-    timestamp = Column(String(100))
-    acepted = Column(Boolean, default=False)
+    user_id = Column(String(100), ForeignKey("users.id"), nullable=False)
+    book_id = Column(String(100), ForeignKey("book.isbn"), nullable=False)
+    num_req_licenses = Column(Integer, nullable=False) 
+    timestamp = Column(DateTime, default=func.now())
+    status = Column(Enum("Aceptada", "Rechazada", "En espera"), default=False)
 
 # class Machine(Base):
 #     __tablename__ = 'machines'

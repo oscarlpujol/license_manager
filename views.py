@@ -33,7 +33,7 @@ def active_licenses():
         if request.method == 'GET':
             books = (License.query
                      .filter(License.requested_by.is_(None))
-                     .with_entities(License.title, License.isbn, func.count(License.id))
+                     .with_entities(License.title, License.isbn, func.count(License.code))
                      .group_by(License.isbn)
                      .all()
             )
