@@ -3,150 +3,31 @@
 
     --navTextColors: #FFF;
 
+    --textColors: #333333;
+    --backgroundColors: #F3F3F3;
+    --inputBackground: #FFFFFF;
+    --filterBackground: #b6b6b6;
+    --inputBorder: #383838;
+    --linkColor: #256aa6;
+    --linkColorHover: #3ea6ff;
+    --clickableItemColor: #01648D;
+    --btnAndPageno: #337AB7;
+    --navBorder: #FFF;
+    --navBorderHover: #DDD;
+    --tableBackground: #F6F6F6;
+    --tableShadow: #828282;
+    --themeBtn: #000000;
+    --themeBtnHover: #161616;
+    --themeBtnBorder: #337ab7;
 
-    --textColors-light: #333333;
-    --backgroundColors-light: #F3F3F3;
-    --inputBackground-light: #FFFFFF;
-    --filterBackground-light: #b6b6b6;
-    --inputBorder-light: #383838;
-    --linkColor-light: #256aa6;
-    --linkColorHover-light: #3ea6ff;
-    --clickableItemColor-light: #337AB7;
-    --btnAndPageno-light: #337AB7;
-    --navBorder-light: #FFF;
-    --navBorderHover-light: #DDD;
-    --tableBackground-light: #F6F6F6;
-    --tableShadow-light: #828282;
-    --themeBtn-light: #000000;
-    --themeBtnHover-light: #161616;
-    --themeBtnBorder-light: #337ab7;
-
-    --textColors-dark: #FFFFFF;
-    --backgroundColors-dark: #1C202C;
-    --inputBackground-dark: #181818;
-    --filterBackground-dark: #212121;
-    --inputBorder-dark: #383838;
-    --linkColor-dark: #3ea6ff;
-    --linkColorHover-dark: #3ec2ff;
-    --clickableItemColor-dark: #3ea6ff;
-    --btnAndPageno-dark: #337ab7;
-    --navBorder-dark: #383838;
-    --navBorderHover-dark: #585858;
-    --tableBackground-dark: #1A1C28;
-    --tableShadow-dark: #101218;
-    --themeBtn-dark: #FFFFFF;
-    --themeBtnHover-dark: #bebebe;
-    --themeBtnBorder-dark: #337ab7;
 }
 
-@media(prefers-color-scheme: dark){
-    :root{
-        --textColors: var(--textColors-dark);
-        --backgroundColors: var(--backgroundColors-dark);
-        --inputBackground: var(--inputBackground-dark);
-        --filterBackground: var(--filterBackground-dark);
-        --inputBorder: var(--inputBorder-dark);
-        --linkColor: var(--linkColor-dark);
-        --linkColorHover: var(--linkColorHover-dark);
-        --clickableItemColor: var(--clickableItemColor-dark);
-        --btnAndPageno: var(--btnAndPageno-dark);
-        --navBorder: var(--navBorder-dark);
-        --navBorderHover: var(--navBorderHover-dark);
-        --tableBackground: var(--tableBackground-dark);
-        --tableShadow: var(--tableShadow-dark);
-        --themeBtn: var(--themeBtn-dark);
-        --themeBtnHover: var(--themeBtnHover-dark);
-        --themeBtnBorder: var(--themeBtnBorder-dark);
-    }
-}
-
-[color-scheme="dark"] {
-    --textColors: var(--textColors-dark);
-    --backgroundColors: var(--backgroundColors-dark);
-    --inputBackground: var(--inputBackground-dark);
-    --filterBackground: var(--filterBackground-dark);
-    --inputBorder: var(--inputBorder-dark);
-    --linkColor: var(--linkColor-dark);
-    --linkColorHover: var(--linkColorHover-dark);
-    --clickableItemColor: var(--clickableItemColor-dark);
-    --btnAndPageno: var(--btnAndPageno-dark);
-    --navBorder: var(--navBorder-dark);
-    --navBorderHover: var(--navBorderHover-dark);
-    --tableBackground: var(--tableBackground-dark);
-    --tableShadow: var(--tableShadow-dark);
-    --themeBtn: var(--themeBtn-dark);
-    --themeBtnHover: var(--themeBtnHover-dark);
-    --themeBtnBorder: var(--themeBtnBorder-dark);
-}
-
-@media(prefers-color-scheme: light){
-    :root{
-        --textColors: var(--textColors-light);
-        --backgroundColors: var(--backgroundColors-light);
-        --inputBackground: var(--inputBackground-light);
-        --filterBackground: var(--filterBackground-light);
-        --inputBorder: var(--inputBorder-light);
-        --linkColor: var(--linkColor-light);
-        --linkColorHover: var(--linkColorHover-light);
-        --clickableItemColor: var(--clickableItemColor-light);
-        --btnAndPageno: var(--btnAndPageno-light);
-        --navBorder: var(--navBorder-light);
-        --navBorderHover: var(--navBorderHover-light);
-        --tableBackground: var(--tableBackground-light);
-        --tableShadow: var(--tableShadow-light);
-        --themeBtn: var(--themeBtn-light);
-        --themeBtnHover: var(--themeBtnHover-light);
-        --themeBtnBorder: var(--themeBtnBorder-light);
-    }
-}
-
-[color-scheme="light"] {
-    --textColors: var(--textColors-light);
-    --backgroundColors: var(--backgroundColors-light);
-    --inputBackground: var(--inputBackground-light);
-    --filterBackground: var(--filterBackground-light);
-    --inputBorder: var(--inputBorder-light);
-    --linkColor: var(--linkColor-light);
-    --linkColorHover: var(--linkColorHover-light);
-    --clickableItemColor: var(--clickableItemColor-light);
-    --btnAndPageno: var(--btnAndPageno-light);
-    --navBorder: var(--navBorder-light);
-    --navBorderHover: var(--navBorderHover-light);
-    --tableBackground: var(--tableBackground-light);
-    --tableShadow: var(--tableShadow-light);
-    --themeBtn: var(--themeBtn-light);
-    --themeBtnHover: var(--themeBtnHover-light);
-    --themeBtnBorder: var(--themeBtnBorder-light);
-}
-
-.theme{
-    background-color: var(--themeBtn);
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    border: 3px solid var(--themeBtnBorder);
-    cursor: pointer;
-    display: grid;
-    place-items: center;
-    position: fixed;
-    float: right;
-    top: 10px;
-    right: 10px;
-    transition: background 0.5s ease, color 0.5s ease;
-}
-
-.theme:is(:hover){
-    background-color: var(--themeBtnHover);
-    opacity: .8;
-}
-
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
 body{
     background-color: var(--backgroundColors);
     color: var(--textColors);
     transition: background 0.5s ease, color 0.5s ease;
-    font-family: 'Roboto', sans-serif; 
+    font-family: "Open Sans", Verdana, sans-serif; 
 }
 #particles-js {
     background-color: var(--backgroundColors);
@@ -303,11 +184,40 @@ thead > tr > th {
 
 @import url('https://fonts.googleapis.com/css2?family=Questrial&display=swap');
 
-#theTitle{
+#theTitle {
     font-family: 'Questrial', sans-serif;
     font-weight: 200;
 }
 
-#updateAlert{
+#updateAlert {
     margin-top: 50px;
+}
+
+.navbar-brand {
+    padding-top: 0;
+}
+
+#footer {
+    position:relative;
+    bottom: 0;
+    font-size: 14px;
+}
+.img-footer{
+    height: 115px;
+    float: right;
+}
+.wrapper {
+    min-height: 80vh;
+    padding-top: 15vh;
+}
+
+.title-footer {
+    font-size: 23px;
+    margin: 40px 0 10px 0;
+    color: #01648d;
+    font-weight: 700;
+}
+
+.item-foo-link {
+ margin: 0;
 }

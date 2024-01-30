@@ -1,49 +1,58 @@
 <!DOCTYPE html>
 
 <html color-scheme="">
-  <head>
-    {% block head %}
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico')}}"
-      type="image/x-icon" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
-    <script>
-      let root = document.querySelector(':root')
-      let theme = localStorage.getItem('wol.theme') || 'light';
-      root.setAttribute('color-scheme', `${theme}`);
-    </script>
-    <title>{{ TITLE }}</title>
-    {% endblock %}
-  </head>
 
-  <body>
-    <button class="theme" role="switch" aria-label="Cambiar tema"></button>
-    <div class="container" style="position: relative;">
-      <h2 class="text-center" id="theTitle">{{ TITLE }}</h2><br>
-      {% if isAdmin %}
-        {% block admin_menu %}
-          <a id="linkIndex" href="{{ url_for('views.index') }}">Formulario de solicitud</a>
-          <a id="linkActiveLicenses" href="{{ url_for('views.active_licenses') }}">Licencias</a>
-          <a id="linkRequests" href="{{ url_for('views.requests') }}">Solicitudes pendientes</a>
-          <a id="linkUsers" href="{{ url_for('views.users') }}">Usuarios</a>
-          <a id="linkManagement" href="{{ url_for('views.management') }}">Administración</a>
-        {% endblock %}
-      {% endif %}
-      {% block container %}
-          {% block table_content %}
-          {% endblock %}
-      {% endblock %}
+<head>
+  {% block head %}
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico')}}" type="image/x-icon" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
+  <script>
+    let root = document.querySelector(':root')
+    let theme = localStorage.getItem('wol.theme') || 'light';
+    root.setAttribute('color-scheme', `${theme}`);
+  </script>
+  <title>{{ TITLE }}</title>
+  {% endblock %}
+</head>
 
-      {% block user_info %}
-        <a class="logoutLink" href="/logout">Cerrar Sesión</a> 
-      {% endblock %}
+<body>
+
+  <nav class="navbar bg-light fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">
+        <img class="navbar-brand" src="{{ url_for('static', filename='img/logo.svg')}}" alt="Logo" height="50px"
+          class="d-inline-block align-text-top">
+      </a>
     </div>
+  </nav>
 
-  {% with messages = get_flashed_messages() %}
+  <div class="container wrapper">
+    <h2 class="text-center" id="theTitle">{{ TITLE }}</h2><br>
+    {% if isAdmin %}
+    {% block admin_menu %}
+    <a id="linkIndex" href="{{ url_for('views.index') }}">Formulario de solicitud</a>
+    <a id="linkActiveLicenses" href="{{ url_for('views.active_licenses') }}">Licencias</a>
+    <a id="linkRequests" href="{{ url_for('views.requests') }}">Solicitudes pendientes</a>
+    <a id="linkUsers" href="{{ url_for('views.users') }}">Usuarios</a>
+    <a id="linkManagement" href="{{ url_for('views.management') }}">Administración</a>
+    {% endblock %}
+    {% endif %}
+    {% block container %}
+    {% block table_content %}
+    {% endblock %}
+    {% endblock %}
+
+    {% block user_info %}
+    <a class="logoutLink" href="/logout">Cerrar Sesión</a>
+    {% endblock %}
+
+
+    {% with messages = get_flashed_messages() %}
     {% if messages %}
     <ul class=flashes>
       {% for message in messages %}
@@ -51,15 +60,38 @@
       {% endfor %}
     </ul>
     {% endif %}
-  {% endwith %}
-      
-  </body>
-  {% block scripts %}
-  <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-  <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
-  <script src="{{ url_for('static', filename='js/functions.js')}}"></script>
-  <script src="{{ url_for('static', filename='js/theme.js')}}" type="module"></script>
-  {% endblock %}
+    {% endwith %}
+
+  </div>
+
+  <footer class="bg-light" id="footer" role="contentinfo">
+    <div class="container">
+      <div class="row">
+        <p class="title-footer">SGEL Libros</p>
+        <div class="col col-sm-4">   
+          <p class="item-foo-link"><a href="https://www.sgellibros.es/aviso-legal" >Aviso Legal</a></p>
+          <p class="item-foo-link"><a href="https://www.sgellibros.es/politica-de-privacidad" >Política de Privacidad</a></p>
+          <p class="item-foo-link"><a href="https://www.sgellibros.es/politica-de-cookies">Política de Cookies</a></p>
+          <p class="item-foo-link"><a href="https://www.sgellibros.es/condiciones-generales-de-ventas">Condiciones generales de ventas</a>
+          </p>
+        </div>
+        <div class="col col-sm-4"></div>
+        <div class="col col-sm-4">
+          <div class="logo-footer float-right"><img class="img-footer img-fluid" src="{{ url_for('static', filename='img/logo.svg')}}"></div>
+        </div>
+        <p class="copy">Copyright © 2024 SGEL. Todos los derechos reservados.</p>
+      </div>
+    </div>
+
+  </footer>
+
+</body>
+{% block scripts %}
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
+<script src="{{ url_for('static', filename='js/functions.js')}}"></script>
+<script src="{{ url_for('static', filename='js/theme.js')}}" type="module"></script>
+{% endblock %}
 
 </html>

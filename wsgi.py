@@ -1,6 +1,6 @@
 import os
 
-from main import app, scheduler, print_time
+from main import app, scheduler
 
 if __name__ == '__main__':
     PORT = os.environ.get('PORT') if os.environ.get('PORT') else 3000
