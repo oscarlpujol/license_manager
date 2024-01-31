@@ -7,7 +7,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico')}}" type="image/x-icon" />
+  <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico')}}" type="image/x-icon" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.min.css">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
@@ -28,6 +28,13 @@
         <img class="navbar-brand" src="{{ url_for('static', filename='img/logo.svg')}}" alt="Logo" height="50px"
           class="d-inline-block align-text-top">
       </a>
+
+      <div class="d-flex">
+        {% block user_info %}
+          <button class="btn btn-outline-danger" onclick="location.href='/logout'" >Cerrar Sesión</button>
+        {% endblock %}
+      </div>
+
     </div>
   </nav>
 
@@ -45,10 +52,6 @@
     {% block container %}
     {% block table_content %}
     {% endblock %}
-    {% endblock %}
-
-    {% block user_info %}
-    <a class="logoutLink" href="/logout">Cerrar Sesión</a>
     {% endblock %}
 
 
@@ -69,10 +72,10 @@
       <div class="row">
         <p class="title-footer">SGEL Libros</p>
         <div class="col col-sm-4">   
-          <p class="item-foo-link"><a href="https://www.sgellibros.es/aviso-legal" >Aviso Legal</a></p>
-          <p class="item-foo-link"><a href="https://www.sgellibros.es/politica-de-privacidad" >Política de Privacidad</a></p>
-          <p class="item-foo-link"><a href="https://www.sgellibros.es/politica-de-cookies">Política de Cookies</a></p>
-          <p class="item-foo-link"><a href="https://www.sgellibros.es/condiciones-generales-de-ventas">Condiciones generales de ventas</a>
+          <p class="item-foo-link"><a target="_blank" href="https://www.sgellibros.es/aviso-legal" >Aviso Legal</a></p>
+          <p class="item-foo-link"><a target="_blank" href="https://www.sgellibros.es/politica-de-privacidad" >Política de Privacidad</a></p>
+          <p class="item-foo-link"><a target="_blank" href="https://www.sgellibros.es/politica-de-cookies">Política de Cookies</a></p>
+          <p class="item-foo-link"><a target="_blank" href="https://www.sgellibros.es/condiciones-generales-de-ventas">Condiciones generales de ventas</a>
           </p>
         </div>
         <div class="col col-sm-4"></div>
@@ -88,6 +91,7 @@
 </body>
 {% block scripts %}
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
 <script src="{{ url_for('static', filename='js/functions.js')}}"></script>

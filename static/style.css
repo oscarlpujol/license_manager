@@ -161,19 +161,12 @@ thead > tr > th {
     background-color: var(--btnAndPageno);
 }
 
-.btn{
-    background-color: var(--btnAndPageno) !important;
+.btnColorTheme{
+   background-color: var(--btnAndPageno); 
 }
 
 .table{
     transition: background 0.5s ease, color 0.5s ease;
-}
-
-.logoutLink {
-    position: relative;
-    float: right;
-    top: 25px;
-    right: 10px;
 }
 
 .alert{
