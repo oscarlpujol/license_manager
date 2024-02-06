@@ -53,15 +53,15 @@ def password():
     except:
         return render_template('changePassword.html', error="Ha ocurrido un error.")
 
+#TODO: Habría que ponerlo en un try catch para que la app no muera frente a formularios raros
 @routes.route('/solicitar', methods=['POST'])
 @login_required
 def requests():
     action = request.form['action']
     email = request.form.get('email', current_user.email)
     grouped_data = {}
-
     for key, value in request.form.items():
-        if key in ['action', 'email', 'title']:
+        if key in ['action', 'email', 'title', 'message']:
             continue
 
         field_number = key.split('_')[1]
