@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, abort
 from flask_login import login_required, current_user
 from sqlalchemy import func
 
-from models import User, License, Request #, Machine, Ownership,
+from models import User, License, Request, Book #, Machine, Ownership,
 import data.serverConfig as config
 from data.constans import roles
 
@@ -17,12 +17,24 @@ def currentVersion():
 def index():
     if request.method == 'GET':
         if current_user.activated:
+            #TODO: Hacer un Join de ambas tablas para que funcione
+            books = (Book.query
+                    .outerjoin(License, Book.isbn == License.book)
+                    .with_entities(Book.title, Book.isbn, 
+                                   func.count(License.code) if current_user.admin else '')
+                    .filter(License.requested_by.is_(None))
+                    .group_by(License.book)
+                    .all()
+            )
+
+
+
             # machines = []
             # if hasattr(current_user, 'admin'):
             #     owner = Ownership.query.filter_by(user_id = current_user.id).all()
             #     for machine in owner:
             #         machines.append(Machine.query.get(machine.machine_id))
-            return render_template('index.html', TITLE=config.TITLE, role=current_user.role, isAdmin=current_user.admin, currentVersion=currentVersion())
+            return render_template('index.html', TITLE=config.TITLE, books=books, role=current_user.role, isAdmin=current_user.admin, currentVersion=currentVersion())
         else:
             return render_template('changePassword.html')
 
@@ -33,12 +45,13 @@ def active_licenses():
     if current_user.admin:
         if request.method == 'GET':
             books = (License.query
+                     .outerjoin(Book, Book.isbn == License.book)
                      .filter(License.requested_by.is_(None))
-                     .with_entities(License.title, License.isbn, func.count(License.code))
-                     .group_by(License.isbn)
+                     .with_entities(Book.title, License.book, func.count(License.code))
+                     .group_by(License.book)
                      .all()
             )
-            return render_template('books.html', books=books, TITLE=config.TITLE, isAdmin=current_user.admin)
+            return render_template('books.html', TITLE=config.TITLE, books=books, isAdmin=current_user.admin)
     else:
         abort(403)
 

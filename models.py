@@ -66,14 +66,12 @@ class License(Base):
     user_type = Column(String(100))
     functionality = Column(String(100))
     requested_by = Column(String(100), ForeignKey("requests.id"), nullable=True)
-    expiration_date = Column(DateTime)
+    expiration_date = Column(String(100))
     # timestamp_request ?
 
-    def __init__(self, code, book, user_type, functionality, expiration_date):
+    def __init__(self, code, book,expiration_date):
         self.code = code
         self.book = book
-        self.user_type = user_type
-        self.functionality = functionality
         self.expiration_date = expiration_date
 
     def __repr__(self):

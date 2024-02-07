@@ -12,7 +12,7 @@ import os
 from subprocess import run, PIPE
 
 from database import init_db, db_session
-from models import User, License#, Machine
+from models import User, License, Book#, Machine
 from auth import auth
 from views import views
 from routes import routes
@@ -59,10 +59,13 @@ if users == []:
     with open("dev_conf/licenses.json", 'r') as file:
         licenses = json.load(file)
         for license in licenses:
+            if not Book.query.get(license["ISBN"]):
+                new_book = Book(license["ISBN"], license["title"])
+                db_session.add(new_book)
+                db_session.commit()
             new_license = License(
                 code = license["license_id"],
-                isbn = license["ISBN"],
-                title = license["title"],
+                book = new_book.isbn,
                 expiration_date = license["expiration_date"]
                 )
             db_session.add(new_license)
