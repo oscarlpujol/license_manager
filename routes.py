@@ -1,6 +1,8 @@
 from flask import Blueprint, request, abort, redirect, url_for, render_template, flash
 from flask_login import login_required, current_user
 from werkzeug.security import check_password_hash
+from openpyxl import load_workbook
+
 import random
 import string
 import re
@@ -8,7 +10,7 @@ import os
 
 from data.constans import default_req_state, finished_req
 
-from models import User, Request #, Machine, Ownership
+from models import User, Request, Book, License #, Machine, Ownership
 from database import db_session
 import mail.mail as mail
 import data.serverConfig as config
@@ -89,6 +91,41 @@ def send_licenses(email, isbn, number):
     request.query()
     request.finished()
 
+
+@routes.route('/licencias', methods=['POST'])
+@login_required
+def licencias():
+    if current_user.admin:
+        if request.method == 'POST':
+            license_excel = request.files['file']
+            workbook = load_workbook(license_excel)
+            sheet = workbook.active
+            CABECERAS = ('ISBN', 'Libro', 'Código', 'Usuario', 'Fecha caducidad licencias:', 'Duración licencias:')
+            for row in sheet.iter_rows(min_row=1, max_row=1, values_only=True):
+                cabeceras_excel = row
+            if CABECERAS != cabeceras_excel:
+                return redirect(url_for('views.active_licenses', error=True))
+            duplicated_licenses = []
+            for row in sheet.iter_rows(min_row=2, values_only=True):
+                isbn = row[0].replace("-", "")
+                book = Book.query.get(isbn)
+                if not book:
+                    new_book = Book(isbn=isbn, title=row[1])
+                    db_session.add(new_book)
+                    db_session.commit()
+                    book = Book.query.get(isbn)
+                license = License.query.get(row[2])
+                if license:
+                    duplicated_licenses.append(license)
+                else:
+                    # TODO: Hay que poner en las licencias la fecha de caducidad de la misma y la duración de la licencia, además del usuario
+                    new_license = License(row[2], book.isbn, row[4])
+                    db_session.add(new_license)
+                    db_session.commit()
+            if duplicated_licenses:
+                return 'Página con las licencias duplicadas'
+            else:
+                return 'Licencias subidas correctamente'
 
 # @routes.route('/machines', methods=['POST', 'PUT'])
 # @login_required

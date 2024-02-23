@@ -21,7 +21,7 @@ def index():
             books = (Book.query
                     .outerjoin(License, Book.isbn == License.book)
                     .with_entities(Book.title, Book.isbn, 
-                                   func.count(License.code) if current_user.admin else '')
+                                func.count(License.code) if current_user.admin else '')
                     .filter(License.requested_by.is_(None))
                     .group_by(License.book)
                     .all()
@@ -45,13 +45,14 @@ def active_licenses():
     if current_user.admin:
         if request.method == 'GET':
             books = (License.query
-                     .outerjoin(Book, Book.isbn == License.book)
-                     .filter(License.requested_by.is_(None))
-                     .with_entities(Book.title, License.book, func.count(License.code))
-                     .group_by(License.book)
-                     .all()
+                    .outerjoin(Book, Book.isbn == License.book)
+                    .filter(License.requested_by.is_(None))
+                    .with_entities(Book.title, License.book, func.count(License.code))
+                    .group_by(License.book)
+                    .all()
             )
-            return render_template('books.html', TITLE=config.TITLE, books=books, isAdmin=current_user.admin)
+            error = request.args.get('error')
+            return render_template('books.html', TITLE=config.TITLE, books=books, isAdmin=current_user.admin, error=error)
     else:
         abort(403)
 

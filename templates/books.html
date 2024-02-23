@@ -5,7 +5,11 @@
 <h3>Licencias</h3>
 <div class="borderTable align-middle">
   <button>Descargar licencias</button>
-  <button>Cargar licencias</button>
+  <form action="" method="post" enctype="multipart/form-data">
+    <input type="file" name="file"
+        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+    <input type="submit" value="Upload">
+</form>
   <h4>Licencias disponibles</h4>
     <table id="licencias" class="table table-striped table-hover" style="width:100%">
       <thead>
@@ -15,6 +19,11 @@
           <th>Número de licencias disponibles</th>
         </tr>
       </thead>
+    {% if error: %}
+    <!-- TODO: Añadir un popup que diga que los parámetros no concuerdan con los esperados, el formato debería de ser: -->
+    <!-- CABECERAS = ('ISBN', 'Libro', 'Código', 'Usuario', 'Fecha caducidad licencias:', 'Duración licencias:') -->
+      <h1>{{ error }}</h1>
+    {% endif %}
       <tbody>
         {% if books: %}
         {% for book in books: %}
