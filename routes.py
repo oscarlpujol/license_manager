@@ -107,19 +107,20 @@ def licencias():
                 return redirect(url_for('views.active_licenses', error=True))
             duplicated_licenses = []
             for row in sheet.iter_rows(min_row=2, values_only=True):
-                isbn = row[0].replace("-", "")
+                isbn, title, license_code, user_type, expiration_date, duration = row
+                isbn = isbn.replace("-", "")
                 book = Book.query.get(isbn)
                 if not book:
-                    new_book = Book(isbn=isbn, title=row[1])
+                    new_book = Book(isbn, title)
                     db_session.add(new_book)
                     db_session.commit()
                     book = Book.query.get(isbn)
-                license = License.query.get(row[2])
+                
+                license = License.query.get(license_code)
                 if license:
                     duplicated_licenses.append(license)
                 else:
-                    # TODO: Hay que poner en las licencias la fecha de caducidad de la misma y la duración de la licencia, además del usuario
-                    new_license = License(row[2], book.isbn, row[4])
+                    new_license = License(license_code, isbn, user_type, expiration_date, duration)
                     db_session.add(new_license)
                     db_session.commit()
             if duplicated_licenses:

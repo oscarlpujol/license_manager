@@ -66,7 +66,9 @@ if users == []:
             new_license = License(
                 code = license["license_id"],
                 book = new_book.isbn,
-                expiration_date = license["expiration_date"]
+                user_type= license["user_type"],
+                expiration_date = license["expiration_date"],
+                duration = license["duration"]
                 )
             db_session.add(new_license)
             db_session.commit()

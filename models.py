@@ -64,15 +64,18 @@ class License(Base):
     code = Column(String(100), primary_key=True) # primary keys are required by SQLAlchemy
     book = Column(String(100), ForeignKey("books.isbn"), nullable=False)
     user_type = Column(String(100))
-    functionality = Column(String(100))
-    requested_by = Column(String(100), ForeignKey("requests.id"), nullable=True)
     expiration_date = Column(String(100))
+    duration = Column(String(100))
+    requested_by = Column(String(100), ForeignKey("requests.id"), nullable=True)
+    
     # timestamp_request ?
 
-    def __init__(self, code, book,expiration_date):
+    def __init__(self, code, book, user_type, expiration_date, duration):
         self.code = code
         self.book = book
+        self.user_type = user_type
         self.expiration_date = expiration_date
+        self.duration = duration
 
     def __repr__(self):
         license_json = {
