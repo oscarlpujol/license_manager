@@ -4,13 +4,17 @@
 {% block container %}
 <h3>Licencias</h3>
 <div class="borderTable align-middle">
-  <button>Descargar licencias</button>
+  <button>Descargar licencias</button> <br> <br>
   <form action="" method="post" enctype="multipart/form-data">
-    <input type="file" name="file"
-        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
-      <!-- TODO: Comprobar que está el archivo subido antes de darle, si no, se muere -->
-    <input type="submit" value="Upload">
+      <div class="mb-3">
+        <label for="file" class="form-label">Seleccione el arcivo excel de licencias:</label>
+        <input class="form-control" type="file" name="file" id="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+      </div>
+      <input type="submit" class="btn btn-outline-success" value="Upload">
+
+      <!-- TODO: Comprobar que está el archivo subido antes de darle, si no, se muere --> 
 </form>
+<br>
   <h4>Licencias disponibles</h4>
     <table id="licencias" class="table table-striped table-hover" style="width:100%">
       <thead>
