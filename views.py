@@ -45,10 +45,10 @@ def active_licenses():
     if current_user.admin:
         if request.method == 'GET':
             books = (License.query
-                    .outerjoin(Book, Book.isbn == License.book)
+                    .outerjoin(Book, Book.isbn == License.isbn)
                     .filter(License.requested_by.is_(None))
-                    .with_entities(Book.title, License.book, func.count(License.code))
-                    .group_by(License.book)
+                    .with_entities(Book.title, License.isbn, func.count(License.code))
+                    .group_by(License.isbn)
                     .all()
             )
             error = request.args.get('error')

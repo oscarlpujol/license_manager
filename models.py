@@ -62,17 +62,18 @@ class Book(Base):
 class License(Base):
     __tablename__ = "licenses"
     code = Column(String(100), primary_key=True) # primary keys are required by SQLAlchemy
-    book = Column(String(100), ForeignKey("books.isbn"), nullable=False)
+    isbn = Column(String(100), ForeignKey("books.isbn"), nullable=False)
     user_type = Column(String(100))
     expiration_date = Column(String(100))
     duration = Column(String(100))
     requested_by = Column(String(100), ForeignKey("requests.id"), nullable=True)
-    
+    model_book = relationship('Book', backref=backref('license_elements', lazy=True))
+
     # timestamp_request ?
 
-    def __init__(self, code, book, user_type, expiration_date, duration):
+    def __init__(self, code, isbn, user_type, expiration_date, duration):
         self.code = code
-        self.book = book
+        self.isbn = isbn
         self.user_type = user_type
         self.expiration_date = expiration_date
         self.duration = duration

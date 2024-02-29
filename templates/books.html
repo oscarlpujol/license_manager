@@ -4,7 +4,7 @@
 {% block container %}
 <h3>Licencias</h3>
 <div class="borderTable align-middle">
-  <button>Descargar licencias</button> <br> <br>
+  <button onclick="descargarLicencias()">Descargar licencias</button> <br> <br>
   <form action="" method="post" enctype="multipart/form-data">
       <div class="mb-3">
         <label for="file" class="form-label">Seleccione el arcivo excel de licencias:</label>
@@ -73,5 +73,9 @@
 
 {% block scripts %}
   {{ super() }}
+  <script>
+  function descargarLicencias() {
+    window.location.href = '/licencias/descargar';
+}</script>
   <script src="{{ url_for('static', filename='js/machineFunctions.js')}}"></script>
 {% endblock %}

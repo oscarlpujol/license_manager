@@ -1,12 +1,13 @@
-from flask import Blueprint, request, abort, redirect, url_for, render_template, flash
+from flask import Blueprint, request, abort, redirect, url_for, render_template, flash, make_response
 from flask_login import login_required, current_user
 from werkzeug.security import check_password_hash
-from openpyxl import load_workbook
+from openpyxl import load_workbook, Workbook
 
 import random
 import string
 import re
 import os
+import datetime
 
 from data.constans import default_req_state, finished_req
 
@@ -123,10 +124,43 @@ def licencias():
                     new_license = License(license_code, isbn, user_type, expiration_date, duration)
                     db_session.add(new_license)
                     db_session.commit()
+            # TODO: Hacer esto más bonito
             if duplicated_licenses:
                 return 'Página con las licencias duplicadas'
             else:
                 return 'Licencias subidas correctamente'
+
+@routes.route('/licencias/descargar', methods=['GET'])
+@login_required
+def download_licenses():
+    if current_user.admin:
+        if request.method == 'GET':
+            licenses = License.query.all()
+            workbook = Workbook()
+            worksheet = workbook.active
+            worksheet.append(['ISBN', 'Libro', 'Código', 'Usuario', 'Fecha caducidad licencias:', 'Duración licencias:', 'Petición'])
+            
+            for _, item in enumerate(licenses, start=1):
+                # TODO: Añadir el título mediante la relación con el book.
+                # TODO: Relación con las peticiones
+                worksheet.append([item.code, item.model_book.title, item.isbn, item.user_type, item.expiration_date, item.duration, 'Pedida'])
+            excel_file = save_workbook_to_bytes(workbook)
+
+            response = make_response(excel_file)
+            now = datetime.datetime.now()
+            timestamp = now.strftime("%Y%m%d%H%M%S")
+            response.headers['Content-Type'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            response.headers['Content-Disposition'] = 'attachment; filename=licencias'+ timestamp +'.xlsx'
+            return response
+
+
+def save_workbook_to_bytes(workbook):
+    """Save workbook to bytes stream."""
+    from io import BytesIO
+    bytes_stream = BytesIO()
+    workbook.save(bytes_stream)
+    bytes_stream.seek(0)
+    return bytes_stream.getvalue()
 
 # @routes.route('/machines', methods=['POST', 'PUT'])
 # @login_required
