@@ -21,7 +21,6 @@
         </td>
         <td class="text-center justify-content-center">
           <select class="form-select roleSelect" onchange="changeRole($(this))">
-            <option value="None">Sin asignar</option>
             {% for role in roles %}
             <option {% if user['role'] is not none and role.lower() == user['role'].lower()  %} selected {% endif %} value="{{ role }}">{{ role.capitalize() }}</option>
             {% endfor %}

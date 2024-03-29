@@ -1,4 +1,4 @@
-roles = ["interno", "externo", "promotor"]
+roles = ["Sin asignar", "interno", "externo", "promotor"]
 default_role = "externo"
 
 req_states = ["Aceptada", "Rechazada", "En espera"]
