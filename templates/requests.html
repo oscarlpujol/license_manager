@@ -8,47 +8,67 @@
     <table id="equipos" class="table table-striped table-hover" style="width:100%">
       <thead>
         <tr>
-          <th>Título</th>
-          <th>ISBN</th>
-          <th>Número de licencias</th>
-          <th>Nombre del solicitante</th>
-          <th>Centro</th>
-          <th>Última petición</th>
+          <th>Id</th>
+          <th>dest_email</th>
+          <th>user_email</th>
+          <th>book_id</th>
+          <th>num_req_licenses</th>
+          <th>timestamp</th>
           <th>Gestión</th>
         </tr>
       </thead>
       <tbody>
+        {% for request in requests %}
+        {% if request.status == 'En espera' %}
         <tr>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th></th>
-          <th>Aceptar/Denegar</th>
+          <td>{{ request.id }}</td>
+          <td>{{ request.dest_email }}</td>
+          <td>{{ request.user.email }}</td>
+          <td>{{ request.book_id }}</td>
+          <td>{{ request.num_req_licenses }}</td>
+          <td>{{ request.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+          <td>
+            <button class="btn btn-success" onclick="acceptRequest('{{ request.id }}')">Aceptar</button>
+            <button class="btn btn-danger" onclick="denyRequest('{{ request.id }}')">Denegar</button>
+          </td>
         </tr>
+        {% endif %}
+        {% endfor %}
       </tbody>
-      <tfoot>
-        <tr id="add">
-          <td>
-          </td>
-          <td>
-            <a href="#/" onclick="addMachine()"><svg class="plusIcon" xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 448 512">
-                <path
-                  d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
-              </svg></a>
-          </td>
-          <td>
-          </td>
-          <td>
-          </td>
-          <td>
-          </td>
-          <td>
-          </td>
+    </table>
+</div>
+
+<br><br>
+
+<h3>Otras solicitudes</h3>
+<div class="borderTable align-middle">
+    <table id="equipos2" class="table table-striped table-hover" style="width:100%">
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>dest_email</th>
+          <th>user_email</th>
+          <th>book_id</th>
+          <th>num_req_licenses</th>
+          <th>timestamp</th>
+          <th>status</th>
         </tr>
-      </tfoot>
+      </thead>
+      <tbody>
+        {% for request in requests %}
+        {% if request.status != 'En espera' %}
+        <tr>
+          <td>{{ request.id }}</td>
+          <td>{{ request.dest_email }}</td>
+          <td>{{ request.user.email }}</td>
+          <td>{{ request.book_id }}</td>
+          <td>{{ request.num_req_licenses }}</td>
+          <td>{{ request.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+          <td>{{ request.status }}</td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+      </tbody>
     </table>
 </div>
 {% endblock %}
@@ -60,4 +80,15 @@
 {% block scripts %}
   {{ super() }}
   <script src="{{ url_for('static', filename='js/machineFunctions.js')}}"></script>
+  <script>
+    function acceptRequest(requestId) {
+      // Aquí debes enviar una solicitud al servidor para aceptar la solicitud con el ID proporcionado
+      console.log("Solicitud aceptada: " + requestId);
+    }
+
+    function denyRequest(requestId) {
+      // Aquí debes enviar una solicitud al servidor para denegar la solicitud con el ID proporcionado
+      console.log("Solicitud denegada: " + requestId);
+    }
+  </script>
 {% endblock %}

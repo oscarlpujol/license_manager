@@ -1,10 +1,12 @@
 from flask import Blueprint, render_template, request, abort
 from flask_login import login_required, current_user
 from sqlalchemy import func
+from sqlalchemy.orm import joinedload
 
 from models import User, License, Request, Book #, Machine, Ownership,
 import data.serverConfig as config
 from data.constans import roles
+
 
 views = Blueprint('views', __name__)
 
@@ -63,7 +65,7 @@ def active_licenses():
 def requests():
     if current_user.admin:
         if request.method == 'GET':
-            requests = Request.query.all()
+            requests = Request.query.options(joinedload(Request.user)).filter_by(status='En espera').all()
             return render_template('requests.html', requests=requests, TITLE=config.TITLE, isAdmin=current_user.admin)
     else:
         abort(403)

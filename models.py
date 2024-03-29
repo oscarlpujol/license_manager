@@ -15,6 +15,8 @@ class User(UserMixin, Base):
     admin = Column(Boolean, default=False)
     activated = Column(Boolean, default=False)
 
+    requests = relationship("Request", back_populates="user")
+
     # owns = relationship("Ownership", cascade="all, delete")
 
     def __init__(self, email, password):
@@ -99,6 +101,8 @@ class Request(Base):
     num_req_licenses = Column(Integer, nullable=False) 
     timestamp = Column(DateTime, default=func.now())
     status = Column(Enum(*req_states), default=default_req_state)
+
+    user = relationship("User", back_populates="requests")
 
     def __init__(self, user_id, book_id, num_req_licenses, status=default_req_state):
         self.user_id = user_id
