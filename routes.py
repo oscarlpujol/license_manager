@@ -474,6 +474,44 @@ def user(userId):
             return response
     else:
         abort(403)
+        
+
+@routes.route('/usersRole/<int:userId>', methods=['POST'])
+@login_required
+def users_role(userId):
+    if current_user.admin:
+        if request.method == 'POST':
+            user = User.query.filter_by(id=userId).first()
+            if user:
+                try:
+                    new_role = request.json.get('role')
+                    user.role = new_role
+                    db_session.commit()
+                    response = {
+                        'code': 0
+                    }
+                except Exception as e:
+                    response = {
+                        'code': 2,
+                        'message': f"Error al cambiar el rol del usuario: {str(e)}"
+                    }
+            else:
+                response = {
+                    'code': 1,
+                    'message': "El usuario especificado no existe."
+                }
+        else:
+            response = {
+                'code': 1,
+                'message': "Método no permitido. Solo se permite POST."
+            }
+    else:
+        response = {
+            'code': 403,
+            'message': "No tienes permisos para realizar esta acción."
+        }
+
+    return response
 
 
 # @routes.route('/users/<int:userId>/machines', methods=['PUT', 'DELETE'])

@@ -76,6 +76,7 @@ function editUser(buttonClicked, isAdmin, confirmation = false) {
     checkbox = buttonClicked.parent().parent()
     row = buttonClicked.parent().parent().parent()
     id = row[0].id
+    console.log(id)
     $.ajax({
         method: 'POST',
         url: '/users/' + id,
@@ -91,6 +92,30 @@ function editUser(buttonClicked, isAdmin, confirmation = false) {
             alert(response['message'])
         }
     })
+}
+
+function changeRole(selectElement) {
+    var row = selectElement.closest('tr');
+    var id = row.attr('id');
+    var newRole = selectElement.val();
+
+    $.ajax({
+        method: 'POST',
+        url: '/usersRole/' + id,
+        contentType: 'application/json',
+        data: JSON.stringify({ 'role': newRole }),
+        beforeSend: function() {
+        }
+    }).done(function(response) {
+        if (response['code'] == 0) {
+            // Actualizar el valor en la tabla después de la actualización exitosa
+            // Por ejemplo, puedes cambiar el texto dentro del <p> con la clase "role"
+            row.find('.role').text(newRole);
+        } else {
+            alert(response['message']);
+        }
+    });
+
 }
 
 function restorePass(buttonClicked) {
