@@ -7,3 +7,4 @@ Cython
 Fernet
 cryptography
 apscheduler
+openpyxl
