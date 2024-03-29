@@ -19,11 +19,11 @@ def index():
         if current_user.activated:
             #TODO: Hacer un Join de ambas tablas para que funcione
             books = (Book.query
-                    .outerjoin(License, Book.isbn == License.book)
+                    .outerjoin(License, Book.isbn == License.isbn)
                     .with_entities(Book.title, Book.isbn, 
                                 func.count(License.code) if current_user.admin else '')
                     .filter(License.requested_by.is_(None))
-                    .group_by(License.book)
+                    .group_by(License.isbn)
                     .all()
             )
 
