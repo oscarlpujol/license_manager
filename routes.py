@@ -9,7 +9,7 @@ import re
 import os
 import datetime
 
-from data.constans import default_req_state, finished_req
+from data.constans import default_req_state, finished_req, roles
 
 from models import User, Request, Book, License #, Machine, Ownership
 from database import db_session
@@ -483,17 +483,23 @@ def users_role(userId):
         if request.method == 'POST':
             user = User.query.filter_by(id=userId).first()
             if user:
-                try:
-                    new_role = request.json.get('role')
-                    user.role = new_role
-                    db_session.commit()
+                new_role = request.json.get('role')
+                if new_role in roles:
+                    try:
+                        user.role = new_role
+                        db_session.commit()
+                        response = {
+                            'code': 0
+                        }
+                    except Exception as e:
+                        response = {
+                            'code': 2,
+                            'message': f"Error al cambiar el rol del usuario: {str(e)}"
+                        }
+                else:
                     response = {
-                        'code': 0
-                    }
-                except Exception as e:
-                    response = {
-                        'code': 2,
-                        'message': f"Error al cambiar el rol del usuario: {str(e)}"
+                        'code': 3,
+                        'message': "El rol proporcionado no es válido."
                     }
             else:
                 response = {

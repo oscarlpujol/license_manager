@@ -108,8 +108,6 @@ function changeRole(selectElement) {
         }
     }).done(function(response) {
         if (response['code'] == 0) {
-            // Actualizar el valor en la tabla después de la actualización exitosa
-            // Por ejemplo, puedes cambiar el texto dentro del <p> con la clase "role"
             row.find('.role').text(newRole);
         } else {
             alert(response['message']);
