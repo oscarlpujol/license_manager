@@ -1,0 +1,26 @@
+[
+    {
+        "license_id": "AAABB-1123-AAVV",
+        "ISBN": "9188CCDA",
+        "title": "prueba1",
+        "user_type": "alumno",
+        "expiration_date": "2023",
+        "duration" : "12 meses"
+    },
+    {
+        "license_id": "BAABB-1623-AAVC",
+        "ISBN": "9188Caaa",
+        "title": "prueba2",
+        "user_type": "alumno",
+        "expiration_date": "2024",
+        "duration" : "12 meses"
+    },
+    {
+        "license_id": "CAABB-1623-AAVXXX",
+        "ISBN": "9188Caaa",
+        "title": "prueba2",
+        "user_type": "profesor",
+        "expiration_date": "2024",
+        "duration" : "24 meses"
+    }
+]
