@@ -138,7 +138,7 @@ def download_licenses():
             licenses = License.query.all()
             workbook = Workbook()
             worksheet = workbook.active
-            worksheet.append(['ISBN', 'Libro', 'Código', 'Usuario', 'Fecha caducidad licencias:', 'Duración licencias:', 'Petición'])
+            worksheet.append(['Código', 'Libro', 'ISBN', 'Usuario', 'Fecha caducidad licencias:', 'Duración licencias:', 'Petición'])
             
             for _, item in enumerate(licenses, start=1):
                 # TODO: Añadir el título mediante la relación con el book.
