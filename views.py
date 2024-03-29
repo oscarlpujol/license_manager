@@ -20,7 +20,7 @@ def index():
     if request.method == 'GET':
         if current_user.activated:
             #TODO: Hacer un Join de ambas tablas para que funcione
-            books = (Book.query
+            books_query = (Book.query
                     .outerjoin(License, Book.isbn == License.isbn)
                     .with_entities(Book.title, Book.isbn, 
                                 func.count(License.code) if current_user.admin else '')
@@ -29,14 +29,14 @@ def index():
                     .all()
             )
 
-
+            books = [{"name": item[0], "isbn": item[1], "available": item[2]} for item in books_query]
 
             # machines = []
             # if hasattr(current_user, 'admin'):
             #     owner = Ownership.query.filter_by(user_id = current_user.id).all()
             #     for machine in owner:
             #         machines.append(Machine.query.get(machine.machine_id))
-            return render_template('index.html', TITLE=config.TITLE, books=books, role=current_user.role, isAdmin=current_user.admin, currentVersion=currentVersion())
+            return render_template('index.html', TITLE=config.TITLE, books_data=books, role=current_user.role, isAdmin=current_user.admin, currentVersion=currentVersion())
         else:
             return render_template('changePassword.html')
 
