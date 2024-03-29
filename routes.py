@@ -2,6 +2,7 @@ from flask import Blueprint, request, abort, redirect, url_for, render_template,
 from flask_login import login_required, current_user
 from werkzeug.security import check_password_hash
 from openpyxl import load_workbook, Workbook
+from sqlalchemy import asc, null
 
 import random
 import string
@@ -76,40 +77,43 @@ def requests():
         if key.startswith('isbn'):
             grouped_data[field_number]['isbn'] = value
         elif key.startswith('numlic'):
-            grouped_data[field_number]['numlic'] = value
+            grouped_data[field_number]['numlic'] = int(value)
 
     for req in grouped_data:
         if (not check_licenses(grouped_data[req]['isbn'], grouped_data[req]['numlic'])):
-            abort(400)
+            return "Licencias no disponibles"
 
     for req in grouped_data:
         new_req = Request(current_user.id, email, grouped_data[req]['isbn'], grouped_data[req]['numlic'], default_req_state)
+        db_session.add(new_req)
+        db_session.commit()
         if current_user.role == "interno" or "promotor" and action == "enviar":
             send_licenses(new_req, message)
-            # TODO: Comprobar este if
-        elif current_user.role != "externo" or action != "solicitar":
-            db_session.add(new_req)
-            db_session.commit()
-        
-def send_licenses(new_req):
+        else:
+            return "No permitido"
+        # elif current_user.role != "externo" or action != "solicitar":
+            
+    return "licencias solicitadas"
+    
+def send_licenses(new_req, message):
     # TODO: Mandar el email con las licencias y cambiar el estado de las mismas
     try:
+        available_licenses = License.query.filter_by(isbn=new_req.book_id).filter(License.requested_by == null()).order_by(asc(License.expiration_date)).all()
+        licenses2send = []
+        for license_1 in available_licenses:
+            license_1.requested_by = new_req.id
+            licenses2send.append(license_1.code)
+        new_req.status = finished_req
         send_message()
+        db_session.commit()
     except Exception as exc:
         abort(400)
-    #change_state_licenses()
-    #change_state_req()
-    db_session.add(new_req)
-    db_session.commit()
-    
-    request.query()
-    request.finished()
 
 def send_message():
     return
 
 def check_licenses(req_isbn, req_numlic):
-    num_lic = License.query.filter_by(isbn=req_isbn).count()
+    num_lic = License.query.filter_by(isbn=req_isbn).filter(License.requested_by == null()).count()
     if num_lic >= req_numlic:
         return True
     return False

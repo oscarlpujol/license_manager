@@ -68,6 +68,7 @@ class License(Base):
     user_type = Column(String(100))
     expiration_date = Column(String(100))
     duration = Column(String(100))
+    # TODO: Cambiar el nombre??
     requested_by = Column(String(100), ForeignKey("requests.id"), nullable=True)
     model_book = relationship('Book', backref=backref('license_elements', lazy=True))
 
@@ -80,12 +81,12 @@ class License(Base):
         self.expiration_date = expiration_date
         self.duration = duration
 
-    def __repr__(self):
-        license_json = {
-            "code" : self.code,
-            "ISBN" : self.book
-        }
-        return str(license_json)
+    # def __repr__(self):
+    #     license_json = {
+    #         "code" : self.code,
+    #         "ISBN" : self.isbn
+    #     }
+    #     return str(license_json)
     
     def setLicense(self, active):
         self.active = active
@@ -94,8 +95,8 @@ class License(Base):
 class Request(Base):
     __tablename__ = "requests"
 
-    id = Column(String(100), primary_key=True, unique=True)
-    dest_email = Column(String(100), primary_key=True, unique=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    dest_email = Column(String(100), unique=True)
     user_id = Column(String(100), ForeignKey("users.id"), nullable=False)
     book_id = Column(String(100), ForeignKey("books.isbn"), nullable=False)
     num_req_licenses = Column(Integer, nullable=False) 
@@ -104,8 +105,9 @@ class Request(Base):
 
     user = relationship("User", back_populates="requests")
 
-    def __init__(self, user_id, book_id, num_req_licenses, status=default_req_state):
+    def __init__(self, user_id, dest_email, book_id, num_req_licenses, status=default_req_state):
         self.user_id = user_id
+        self.dest_email = dest_email
         self.book_id = book_id
         self.num_req_licenses = num_req_licenses
         self.status = status
