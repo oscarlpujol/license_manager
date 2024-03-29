@@ -93,6 +93,7 @@ class Request(Base):
     __tablename__ = "requests"
 
     id = Column(String(100), primary_key=True, unique=True)
+    dest_email = Column(String(100), primary_key=True, unique=True)
     user_id = Column(String(100), ForeignKey("users.id"), nullable=False)
     book_id = Column(String(100), ForeignKey("books.isbn"), nullable=False)
     num_req_licenses = Column(Integer, nullable=False) 

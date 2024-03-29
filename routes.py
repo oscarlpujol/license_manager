@@ -60,8 +60,9 @@ def password():
 @routes.route('/solicitar', methods=['POST'])
 @login_required
 def requests():
-    action = request.form['action']
-    email = request.form.get('email', current_user.email)
+    action = request.form.get('action')
+    email = request.form.get('email')
+    message = request.form.get('message')
     grouped_data = {}
     for key, value in request.form.items():
         if key in ['action', 'email', 'title', 'message']:
@@ -78,20 +79,40 @@ def requests():
             grouped_data[field_number]['numlic'] = value
 
     for req in grouped_data:
-        new_req = Request(current_user.id, grouped_data[req]['isbn'], grouped_data[req]['numlic'], default_req_state)
+        if (not check_licenses(grouped_data[req]['isbn'], grouped_data[req]['numlic'])):
+            abort(400)
+
+    for req in grouped_data:
+        new_req = Request(current_user.id, email, grouped_data[req]['isbn'], grouped_data[req]['numlic'], default_req_state)
         if current_user.role == "interno" or "promotor" and action == "enviar":
-            send_licenses(email, grouped_data[req]['isbn'], grouped_data[req]['numlic'])
+            send_licenses(new_req, message)
+            # TODO: Comprobar este if
         elif current_user.role != "externo" or action != "solicitar":
-            abort(403)
-        # db_session.add(new_req)
-        # db_session.commit()
+            db_session.add(new_req)
+            db_session.commit()
         
-def send_licenses(email, isbn, number):
-    import pdb
-    pdb.set_trace()
+def send_licenses(new_req):
+    # TODO: Mandar el email con las licencias y cambiar el estado de las mismas
+    try:
+        send_message()
+    except Exception as exc:
+        abort(400)
+    #change_state_licenses()
+    #change_state_req()
+    db_session.add(new_req)
+    db_session.commit()
+    
     request.query()
     request.finished()
 
+def send_message():
+    return
+
+def check_licenses(req_isbn, req_numlic):
+    num_lic = License.query.filter_by(isbn=req_isbn).count()
+    if num_lic >= req_numlic:
+        return True
+    return False
 
 @routes.route('/licencias', methods=['POST'])
 @login_required
