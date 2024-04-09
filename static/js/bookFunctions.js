@@ -9,38 +9,38 @@
 
 // Ejemplo sacado de: https://jqueryui.com/autocomplete/#custom-data
 
-$(function () {
-    $('#searchByName').autocomplete({
-        minLength: 0,
-        source: books,
-        focus: function (event, ui) {
-            $("#searchByName").val(ui.item.name);
-            return false;
-        },
-        select: function (event, ui) {
-            $('#searchByISBN').val(ui.item.isbn);
-            return false;
-        }
-    }).autocomplete("instance")._renderItem = function (ul, item) {
-        return $("<li>")
-            .append(item.name)
-            .appendTo(ul);
-    };
+// $(function () {
+//     $('#searchByName').autocomplete({
+//         minLength: 0,
+//         source: books,
+//         focus: function (event, ui) {
+//             $("#searchByName").val(ui.item.name);
+//             return false;
+//         },
+//         select: function (event, ui) {
+//             $('#searchByISBN').val(ui.item.isbn);
+//             return false;
+//         }
+//     }).autocomplete("instance")._renderItem = function (ul, item) {
+//         return $("<li>")
+//             .append(item.name)
+//             .appendTo(ul);
+//     };
 
-    $('#searchByISBN').autocomplete({
-        minLength: 0,
-        source: books,
-        focus: function (event, ui) {
-            $("#searchByISBN").val(ui.item.isbn);
-            return false;
-        },
-        select: function (event, ui) {
-            $('#searchByName').val(ui.item.name);
-            return false;
-        }
-    }).autocomplete("instance")._renderItem = function (ul, item) {
-        return $("<li>")
-            .append(item.isbn)
-            .appendTo(ul);
-    }
-});
+//     $('#searchByISBN').autocomplete({
+//         minLength: 0,
+//         source: books,
+//         focus: function (event, ui) {
+//             $("#searchByISBN").val(ui.item.isbn);
+//             return false;
+//         },
+//         select: function (event, ui) {
+//             $('#searchByName').val(ui.item.name);
+//             return false;
+//         }
+//     }).autocomplete("instance")._renderItem = function (ul, item) {
+//         return $("<li>")
+//             .append(item.isbn)
+//             .appendTo(ul);
+//     }
+// });

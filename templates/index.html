@@ -7,6 +7,15 @@
 
 {% block container %}
 <h3>Formulario de solicitud</h3>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js">   
+</script>   
+
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.js">   
+</script>   
+
+<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/ui-lightness/jquery-ui.css"
+    rel="stylesheet" type="text/css" />   
+    <input type="text" id="tags"> 
 <div class="borderTable align-middle">
     <!-- TODO: Añadir los campos del formulario de google -->
     <form id="searchForm" action="#" method="post">
@@ -95,6 +104,19 @@
     }
   </script>
   <script>var books = {{ books_data|tojson }}</script>
+  <script> 
+    $( function() { 
+      var ISBNs = []
+      for (var book in books) {
+        console.log(book)
+        ISBNs.push(books[book].isbn)
+      }
+      console.log(ISBNs)
+      $( "#searchByISBN" ).autocomplete({ 
+        source: ISBNs 
+      }); 
+    } ); 
+  </script> 
   <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
   <script src="{{ url_for('static', filename='js/bookFunctions.js')}}"></script>
 {% endblock %}
