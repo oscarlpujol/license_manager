@@ -31,6 +31,7 @@
         <tr>
           <th>Título</th>
           <th>ISBN</th>
+          <th>Número</th>
         </tr>
       </thead>
       <tbody>
@@ -103,20 +104,88 @@
       }
     }
   </script>
-  <script>var books = {{ books_data|tojson }}</script>
-  <script> 
-    $( function() { 
-      var ISBNs = []
-      for (var book in books) {
-        console.log(book)
-        ISBNs.push(books[book].isbn)
+<script>
+  var books = {{ books_data|tojson }};
+  $(function() {
+    var titles = {};
+    var ISBNs = [];
+    for (var book in books) {
+      var title = books[book].name;
+      var ISBN = books[book].isbn;
+      titles[ISBN] = title; // Asocia cada ISBN con su título
+      ISBNs.push(ISBN);
+    }
+    $("#searchByISBN").autocomplete({
+      source: ISBNs,
+      select: function(event, ui) {
+        var selectedISBN = ui.item.value; // Obtiene el ISBN seleccionado
+        var selectedTitle = titles[selectedISBN]; // Obtiene el título asociado al ISBN
+        $("#searchByISBN").val(selectedISBN)
+        $("#searchByName").val(selectedTitle); // Asigna el título al campo de búsqueda por nombre
+        return false; // Evita la propagación del evento y el comportamiento predeterminado
       }
-      console.log(ISBNs)
-      $( "#tags" ).autocomplete({ 
-        source: ISBNs 
-      }); 
-    } ); 
-  </script> 
+    });
+    $("#searchByName").autocomplete({
+      source: Object.values(titles), // Utiliza los títulos como fuente de autocompletado
+      select: function(event, ui) {
+        var selectedTitle = ui.item.value; // Obtiene el título seleccionado
+        var selectedISBN = Object.keys(titles).find(key => titles[key] === selectedTitle); // Obtiene el ISBN asociado al título seleccionado
+        $("#searchByISBN").val(selectedISBN); // Asigna el ISBN al campo de búsqueda por ISBN
+        $("#searchByName").val(selectedTitle); 
+        return false; // Evita la propagación del evento y el comportamiento predeterminado
+      }
+    });
+        // Función para añadir una fila a la tabla
+    function addRowToTable(title, ISBN) {
+      // Obtener referencia a la tabla
+      var table = $("#licencias tbody");
+
+      var alreadyExists = false;
+      table.find("tr").each(function() {
+        var rowTitle = $(this).find("td:first").text();
+        var rowISBN = $(this).find("td:nth-child(2)").text();
+        if (rowTitle === title || rowISBN === ISBN) {
+          alreadyExists = true;
+          return false; // Salir del bucle each
+        }
+      });
+
+      // Si la licencia ya existe, mostrar un mensaje de error
+      if (alreadyExists) {
+        alert("La licencia ya está en la tabla.");
+        return;
+      }
+
+
+      // Construir la fila de la tabla con los datos proporcionados
+      var row = $("<tr>").append(
+        $("<td>").text(title),
+        $("<td>").text(ISBN),
+        $("<td>")
+      );
+
+      // Añadir la fila a la tabla
+      table.append(row);
+    }
+
+    // Evento click en el botón "Añadir"
+    $("input[name='search']").click(function() {
+      // Obtener los valores de los campos de búsqueda
+      var title = $("#searchByName").val();
+      var ISBN = $("#searchByISBN").val();
+      if (Object.values(titles).includes(title) && ISBNs.includes(ISBN)) {
+      // Añadir una nueva fila a la tabla con los datos
+        addRowToTable(title, ISBN);
+      } else {
+        alert("Ese título y/o ISBN no existe")
+      }
+    });
+  });
+  // $(function() {
+
+  // });
+</script>
+
   <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
-  <script src="{{ url_for('static', filename='js/bookFunctions.js')}}"></script>
+  <!-- <script src="{{ url_for('static', filename='js/bookFunctions.js')}}"></script> -->
 {% endblock %}
