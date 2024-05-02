@@ -35,8 +35,6 @@
         </tr>
       </thead>
       <tbody>
-        <!-- TODO: Aquí hay que añadir los filtros entre el título y el ISBN -->
-        <!--<th><input type="number" class="form-control" name="numlic_1" required></th>-->
       </tbody>
       <tfoot>
         <tr>
@@ -90,20 +88,23 @@
 {% block scripts %}
   {{ super() }}
   <script>
-    var showModal = document.getElementById("showModal")
-
+    var showModal = document.getElementById("showModal");
     showModal.onclick = function () {
-      var form = document.getElementById("reqForm")
-      if (! form.checkValidity()){
-        alert("Se han de rellenar todos los campos")
-      }else{
+      var tbody = document.querySelector("tbody");
+
+      // Verificar si hay contenido dentro del tbody
+      if (tbody.innerHTML.trim() === '') {
+          alert("No hay contenido en la tabla");
+      } else {
+          console.log(tbody.innerHTML.trim())
         var myModal = new bootstrap.Modal(document.getElementById('sendModal'), {
         keyboard: false
         });
         myModal.show();
       }
-    }
+    };
   </script>
+
 <script>
   var books = {{ books_data|tojson }};
   $(function() {
