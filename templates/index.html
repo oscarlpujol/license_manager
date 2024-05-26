@@ -15,7 +15,6 @@
 
 <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/ui-lightness/jquery-ui.css"
     rel="stylesheet" type="text/css" />   
-    <input type="text" id="tags"> 
 <div class="borderTable align-middle">
     <!-- TODO: Añadir los campos del formulario de google -->
     <form id="searchForm" action="#" method="post">
@@ -65,6 +64,14 @@
                 <input type="text" name="email" class="form-control" id="recipient-name">
               </div>
               <div class="mb-3">
+                <label for="template-select" class="col-form-label">Plantilla:</label>
+                <select class="form-select" id="template-select">
+                    <option value="default">Seleccionar Plantilla</option>
+                    <option value="template1">Plantilla 1</option>
+                    <option value="template2">Plantilla 2</option>
+                </select>
+            </div>
+              <div class="mb-3">
                 <label for="message-text" class="col-form-label">Mensaje:</label>
                 <textarea class="form-control" name="message" id="message-text"></textarea>
               </div>
@@ -89,6 +96,22 @@
 {% block scripts %}
   {{ super() }}
   <script>
+    // HTML de las plantillas
+    var templates = {
+        default: `
+            <p>Contenido de la Plantilla 3</p>
+            <p>Esta es la tercera plantilla disponible.</p>
+        `,
+        template1: `
+            <p>Contenido de la Plantilla 1</p>
+            <p>Puedes personalizar este contenido según tus necesidades.</p>
+        `,
+        template2: `
+            <p>Contenido de la Plantilla 2</p>
+            <p>Esta es otra plantilla que puedes utilizar.</p>
+        `
+
+    };
     var showModal = document.getElementById("showModal");
     showModal.onclick = function () {
       var tbody = document.querySelector("tbody");
@@ -113,6 +136,22 @@
             });
         });
 
+        var templateSelect = document.getElementById("template-select");
+        var messageText = document.getElementById("message-text");
+
+        templateSelect.onchange = function () {
+          var selectedTemplate = templateSelect.value;
+
+          // Obtener el HTML de la plantilla seleccionada
+          var templateHTML = templates[selectedTemplate];
+
+          // Mostrar el HTML de la plantilla en el campo de mensaje
+          messageText.value = templateHTML;
+        };
+          var myModal = new bootstrap.Modal(document.getElementById('sendModal'), {
+              keyboard: false
+          });
+          myModal.show();
       }
     };
   </script>
