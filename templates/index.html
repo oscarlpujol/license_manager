@@ -31,7 +31,8 @@
         <tr>
           <th>Título</th>
           <th>ISBN</th>
-          <th>Número</th>
+          <th>Cantidad</th>
+          <th>Editar</th>
         </tr>
       </thead>
       <tbody>
@@ -96,11 +97,22 @@
       if (tbody.innerHTML.trim() === '') {
           alert("No hay contenido en la tabla");
       } else {
-          console.log(tbody.innerHTML.trim())
-        var myModal = new bootstrap.Modal(document.getElementById('sendModal'), {
-        keyboard: false
+        // Recorrer todas las filas del tbody
+        var rows = tbody.querySelectorAll("tr");
+        rows.forEach(function(row) {
+            var inputs = row.querySelectorAll("input");
+            inputs.forEach(function(input) {
+              var num_regex = /^-?\d+$/;
+              if (input.value.trim() === ''){
+                alert("Error: Debe indicar valores en todos los títulos o eliminarlos")
+                return;
+              } else if (! num_regex.test(input.value)) {
+                alert("Error: No se ha introducido un valor correcto, debe de ser un número entero")
+                return;
+              }
+            });
         });
-        myModal.show();
+
       }
     };
   </script>
@@ -162,13 +174,16 @@
       var row = $("<tr>").append(
         $("<td>").text(title),
         $("<td>").text(ISBN),
-        $("<td>")
-      );
+        $("<td>").append($("<input>").val(1)),
+        $("<td>").append($("<button>").text("Borrar").addClass("deleteRow"))
+        );
 
       // Añadir la fila a la tabla
       table.append(row);
     }
-
+    $("#licencias").on("click", ".deleteRow", function() {
+        $(this).closest("tr").remove();
+    });
     // Evento click en el botón "Añadir"
     $("input[name='search']").click(function() {
       // Obtener los valores de los campos de búsqueda
